@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haejo Kang</title>
+  <style>
+    :root {
+      --bg: #f8f6f1;
+      --panel: #fffdf8;
+      --text: #1f1f1f;
+      --muted: #666154;
+      --line: #d9d1c2;
+      --accent: #2d5b7c;
+      --accent-soft: #eef4f8;
+      --shadow: 0 12px 30px rgba(0,0,0,0.06);
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 44px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+    }
+
+    .profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      margin: 0 0 6px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 18px;
+      font-size: 1rem;
+    }
+
+    .small {
+      font-size: 0.98rem;
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    .nav-title,
+    .social-title {
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 22px 0 10px;
+    }
+
+    .nav,
+    .social {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav a,
+    .social a {
+      display: inline-block;
+      padding: 6px 0;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero,
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 40px 36px;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      margin: 0 0 18px;
+      font-size: 1.08rem;
+    }
+
+    .hero-quote {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: #4c4a43;
+      white-space: pre-wrap;
+      font-size: 1rem;
+    }
+
+    .section {
+      padding: 30px 32px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1.45rem;
+      line-height: 1.2;
+    }
+
+    .item {
+      padding: 14px 0;
+      border-top: 1px solid rgba(217, 209, 194, 0.7);
+    }
+
+    .item:first-of-type { border-top: 0; padding-top: 0; }
+
+    .item-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid #d6e4ef;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.92rem;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding: 8px 4px 0;
+    }
+
+    @media (max-width: 900px) {
+      .wrap {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside class="sidebar">
+      <div class="profile"><img src="headshot.jpg" alt="Haejo Kang"></div>
+      <h1>Haejo Kang</h1>
+      <div class="subtitle">Ph.D. Candidate in Political Science, Columbia University</div>
+      <p class="small">
+        Comparative politics · leadership studies · legislative studies<br />
+        AI-driven methods · multimodal data analysis
+      </p>
+
+      <div class="nav-title">Navigation</div>
+      <nav class="nav">
+        <a href="#about">About</a>
+        <a href="#research">Research</a>
+        <a href="#projects">Projects</a>
+        <a href="#teaching">Teaching</a>
+        <a href="#cv">CV</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="social-title">Links</div>
+      <div class="social">
+        <a href="#">Google Scholar</a>
+        <a href="#">CV (PDF)</a>
+        <a href="#">GitHub</a>
+        <a href="#">Email</a>
+      </div>
+    </aside>
+
+    <main>
+      <section class="hero" id="about">
+        <p>
+          I am a fourth-year Ph.D. candidate in Political Science at Columbia University.
+        </p>
+        <p>
+          My research examines leadership and legislative politics using AI-driven methods and multimodal datasets.
+        </p>
+        <p>
+          My dissertation project, <em>The Cultural Logic of Accountability</em>, explores how leadership ideals shape political accountability across contexts.
+        </p>
+        <p>
+          I have been invited to present this work at MPSA 2026 and APSA 2026 panel sessions.
+        </p>
+
+        <div class="pill-row">
+          <span class="pill">Leadership</span>
+          <span class="pill">Legislatures</span>
+          <span class="pill">Political Accountability</span>
+          <span class="pill">AI Methods</span>
+        </div>
+
+        <div class="hero-quote">“A simple academic homepage works best when it is clean,
+readable, and easy to update.”</div>
+      </section>
+
+      <section class="section" id="research">
+        <h2>Research</h2>
+        <div class="item">
+          <div class="item-title">Dissertation Project</div>
+          <div>
+            <em>The Cultural Logic of Accountability: How Leadership Ideals Shape Punishment and Responsiveness</em>
+          </div>
+          <div class="muted">
+            A comparative project building a cross-national index of leadership norms from canonical political texts.
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-title">Current Project</div>
+          <div>
+            <em>Emotion and Issue Ownership in Polarized Legislatures</em>
+          </div>
+          <div class="muted">
+            Uses video-based emotion recognition and legislative transcripts to study strategic emotional displays.
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-title">Broader Interests</div>
+          <div class="muted">
+            Comparative political economy, institutions, elite politics, South Korea, and AI methods for social science.
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="projects">
+        <h2>Selected Projects</h2>
+        <div class="item">
+          <div class="item-title">Leadership Norm Index</div>
+          <div class="muted">Cross-civilizational text analysis of political thought using LLM-assisted classification.</div>
+        </div>
+        <div class="item">
+          <div class="item-title">National Assembly Emotion Dataset</div>
+          <div class="muted">A multimodal dataset of speeches, facial expressions, and electoral context in South Korea.</div>
+        </div>
+        <div class="item">
+          <div class="item-title">Working Papers</div>
+          <div class="muted">Add downloadable PDFs or links to drafts here.</div>
+        </div>
+      </section>
+
+      <section class="section" id="teaching">
+        <h2>Teaching</h2>
+        <div class="item">
+          <div class="item-title">Courses and Teaching Experience</div>
+          <div class="muted">List courses taught, sections led, guest lectures, or teaching interests here.</div>
+        </div>
+      </section>
+
+      <section class="section" id="cv">
+        <h2>CV</h2>
+        <div class="item">
+          <div class="item-title">Curriculum Vitae</div>
+          <div class="muted">Replace this with a direct PDF link once your CV is uploaded.</div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <h2>Contact</h2>
+        <div class="item">
+          <div>Email: your-email@columbia.edu</div>
+          <div>Office / Department address if desired</div>
+        </div>
+      </section>
+
+      <div class="footer">
+        Inspired by the clean, minimalist layout of academic personal websites, with a left navigation panel and readable homepage content.
+      </div>
+    </main>
+  </div>
+</body>
+</html>
