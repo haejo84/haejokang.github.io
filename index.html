@@ -6,199 +6,174 @@
   <title>Haejo Kang</title>
   <style>
     :root {
-      --bg: #f8f6f1;
-      --panel: #fffdf8;
-      --text: #1f1f1f;
-      --muted: #666154;
-      --line: #d9d1c2;
-      --accent: #2d5b7c;
-      --accent-soft: #eef4f8;
-      --shadow: 0 12px 30px rgba(0,0,0,0.06);
-      --max: 1180px;
+      --text: #37352f;
+      --muted: #787774;
+      --line: #e3e2e0;
+      --accent: #37352f;
+      --max: 1100px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #ffffff;
       color: var(--text);
       line-height: 1.7;
     }
-    a {
-      color: var(--accent);
-      text-decoration: none;
+    a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+    a:hover { opacity: 0.7; }
+
+    /* Banner */
+    .banner {
+      width: 100%;
+      height: 340px;
+      background: url('https://images.unsplash.com/photo-1698248476242-bfde13928633?w=1600&h=600&fit=crop&crop=top&q=80&auto=format') center/cover no-repeat;
+      position: relative;
     }
-    a:hover { text-decoration: underline; }
+
+    /* Layout */
     .wrap {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 32px 24px 64px;
+      padding: 40px 32px 64px;
       display: grid;
-      grid-template-columns: 300px minmax(0, 1fr);
-      gap: 44px;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 56px;
     }
-    .sidebar {
-      position: sticky;
-      top: 24px;
-      align-self: start;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 28px 24px;
-      box-shadow: var(--shadow);
-    }
-    .banner {
-      width: 100%;
-      height: 260px;
-      background: url('https://images.unsplash.com/photo-1698248476242-bfde13928633?w=1600&h=500&fit=crop&crop=top&q=80&auto=format') center/cover no-repeat;
-      position: relative;
-    }
-    .banner::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: linear-gradient(transparent, var(--bg));
+
+    /* Sidebar */
+    .sidebar { align-self: start; }
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
     .profile {
       width: 100%;
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
-      margin-bottom: 18px;
-      border: 1px solid var(--line);
+      margin-bottom: 24px;
     }
     .profile img {
       width: 100%;
       height: auto;
       display: block;
-      object-fit: cover;
     }
-    h1 {
-      font-size: 2.25rem;
-      margin: 0 0 6px;
-      line-height: 1.15;
-      font-weight: 700;
+    .sidebar-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.95rem;
     }
-    .subtitle {
-      color: var(--muted);
-      margin-bottom: 18px;
-      font-size: 1rem;
-    }
-    .small {
-      font-size: 0.98rem;
-      color: var(--muted);
-      margin: 0 0 18px;
-    }
-    .nav-title,
-    .social-title {
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 22px 0 10px;
-    }
-    .nav,
-    .social {
-      display: grid;
-      gap: 8px;
-    }
-    .nav a,
-    .social a {
-      display: inline-block;
-      padding: 6px 0;
-    }
-    main {
-      min-width: 0;
-    }
-    .hero,
-    .section {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-    }
-    .hero {
-      padding: 40px 36px;
-      margin-bottom: 24px;
-    }
-    .hero p {
-      margin: 0 0 18px;
-      font-size: 1.08rem;
-    }
-    .hero-quote {
-      margin-top: 24px;
-      padding-top: 20px;
+    .sidebar-links a { text-decoration: none; color: var(--muted); }
+    .sidebar-links a:hover { color: var(--text); opacity: 1; }
+    .sidebar-divider {
+      border: 0;
       border-top: 1px solid var(--line);
-      color: #4c4a43;
-      white-space: pre-wrap;
-      font-size: 1rem;
+      margin: 16px 0;
     }
-    .section {
-      padding: 30px 32px;
-      margin-bottom: 20px;
-    }
-    h2 {
-      margin: 0 0 16px;
-      font-size: 1.45rem;
-      line-height: 1.2;
-    }
-    .item {
-      padding: 14px 0;
-      border-top: 1px solid rgba(217, 209, 194, 0.7);
-    }
-    .item:first-of-type { border-top: 0; padding-top: 0; }
-    .item-title {
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .muted {
+    .sidebar-info {
+      font-size: 0.9rem;
       color: var(--muted);
+      line-height: 1.6;
     }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 32px;
+    }
+    .tab {
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      user-select: none;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: inherit;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active {
+      color: var(--text);
+      font-weight: 600;
+      border-bottom-color: var(--text);
+    }
+
+    /* Content panels */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Main content */
+    main { min-width: 0; }
+    .bio { font-size: 1.05rem; margin-bottom: 24px; }
+    .bio p { margin: 0 0 16px; }
     .pill-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
+      gap: 8px;
+      margin-top: 8px;
     }
     .pill {
-      background: var(--accent-soft);
-      color: var(--accent);
-      border: 1px solid #d6e4ef;
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-size: 0.92rem;
+      background: #f1f1ef;
+      color: var(--text);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 0.88rem;
     }
-    .footer {
-      color: var(--muted);
-      font-size: 0.95rem;
-      padding: 8px 4px 0;
+    h2 {
+      font-size: 1.3rem;
+      margin: 0 0 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
     }
-    .pub-entry {
-      margin-bottom: 10px;
+    .divider {
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin: 20px 0;
     }
+    .item { padding: 16px 0; border-top: 1px solid var(--line); }
+    .item:first-of-type { border-top: 0; padding-top: 0; }
+    .item-title { font-weight: 600; margin-bottom: 4px; }
+    .muted { color: var(--muted); }
+    .pub-entry { margin-bottom: 14px; line-height: 1.6; }
     .teaching-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       gap: 12px;
+      padding: 6px 0;
     }
     .teaching-year {
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       flex-shrink: 0;
     }
-    @media (max-width: 900px) {
-      .banner { height: 180px; }
+    .footer {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 800px) {
+      .banner { height: 200px; }
       .wrap {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 24px;
+        padding: 24px 16px 48px;
       }
-      .sidebar {
-        position: static;
-      }
+      .tabs { overflow-x: auto; }
+      .tab { padding: 8px 12px; font-size: 0.88rem; white-space: nowrap; }
     }
   </style>
 </head>
@@ -213,52 +188,55 @@
       <h1>Haejo Kang</h1>
       <div class="profile"><img src="HJ_headshot.jpeg" alt="Haejo Kang"></div>
 
-      <div class="nav-title">Navigation</div>
-      <nav class="nav">
-        <a href="#about">About</a>
-        <a href="#research">Research</a>
-        <a href="#publications">Publications</a>
-        <a href="#teaching">Teaching</a>
-        <a href="#cv">CV</a>
-        <a href="#contact">Contact</a>
-      </nav>
+      <div class="sidebar-info">
+        Ph.D. Candidate<br>
+        Department of Political Science<br>
+        Columbia University
+      </div>
 
-      <div class="social-title">Links</div>
-      <div class="social">
+      <hr class="sidebar-divider">
+
+      <div class="sidebar-links">
+        <a href="mailto:hk3125@columbia.edu">hk3125@columbia.edu</a>
         <a href="https://scholar.google.com/citations?hl=en&view_op=list_works&user=QUegyN8AAAAJ" target="_blank">Google Scholar</a>
-        <a href="Kang_CV.pdf" target="_blank">CV (PDF)</a>
         <a href="https://github.com/haejokang" target="_blank">GitHub</a>
-        <a href="mailto:hk3125@columbia.edu">Email</a>
+        <a href="Kang_CV.pdf" target="_blank">CV (PDF)</a>
       </div>
     </aside>
 
     <!-- ===== MAIN ===== -->
     <main>
 
-      <!-- About -->
-      <section class="hero" id="about">
-        <p>
-          Welcome! I am a Ph.D. candidate in the Department of Political Science at Columbia University. My research examines how culturally embedded leadership norms shape modern day political accountability of elites across democracies.
-        </p>
-        <p>
-          I built two original datasets: 1) a Leadership Norm Index from 1,542 classic texts spanning 59 countries over nearly five millennia, and 2) an Elite Accountability Dataset tracking misconduct and its consequences among presidents and prime ministers across 40 democracies from the 1950s to the present.
-        </p>
-        <div class="pill-row">
-          <span class="pill">Leadership Studies</span>
-          <span class="pill">Accountability</span>
-          <span class="pill">Natural Language Processing</span>
+      <!-- Tab Navigation -->
+      <div class="tabs">
+        <button class="tab active" data-tab="about">About</button>
+        <button class="tab" data-tab="research">Research</button>
+        <button class="tab" data-tab="publications">Publications</button>
+        <button class="tab" data-tab="teaching">Teaching</button>
+      </div>
+
+      <!-- About Panel -->
+      <div class="panel active" id="about">
+        <div class="bio">
+          <p>
+            Welcome! I am a Ph.D. candidate in the Department of Political Science at Columbia University. My research examines how culturally embedded leadership norms shape modern day political accountability of elites across democracies.
+          </p>
+          <p>
+            I built two original datasets: 1) a Leadership Norm Index from 1,542 classic texts spanning 59 countries over nearly five millennia, and 2) an Elite Accountability Dataset tracking misconduct and its consequences among presidents and prime ministers across 40 democracies from the 1950s to the present.
+          </p>
+          <div class="pill-row">
+            <span class="pill">Leadership Studies</span>
+            <span class="pill">Accountability</span>
+            <span class="pill">Natural Language Processing</span>
+          </div>
         </div>
-      </section>
+      </div>
 
-      <!-- Research -->
-      <section class="section" id="research">
-        <h2>Research</h2>
-
+      <!-- Research Panel -->
+      <div class="panel" id="research">
         <div class="item">
           <div class="item-title">Dissertation Project</div>
-          <div>
-            <em>The Cultural Logic of Accountability: How Leadership Ideals Shape Punishment and Responsiveness</em>
-          </div>
+          <div><em>The Cultural Logic of Accountability: How Leadership Ideals Shape Punishment and Responsiveness</em></div>
           <div class="muted" style="margin-top:8px;">
             What explains cross-national variation in how citizens hold political elites accountable? This project argues that enduring differences in accountability are rooted in historically embedded leadership norms that shape expectations about how rulers should behave. To measure these norms, I construct a Leadership Norm Index (LNI) using a novel dataset of 1,542 texts spanning 59 countries and nearly five millennia. Using large language models, I code each text against 70 survey-style statements capturing normative expectations about rulers' personal conduct, responsiveness to subjects, adherence to law, deference to religion, and relationships with elites. To measure accountability, I assemble a new cross-national dataset of political leaders by systematically extracting biographical records of presidents and prime ministers over the past 50 years, tracking instances of misconduct and the consequences they face. Linking these data to the LNI, I show that societies whose intellectual traditions place greater emphasis on constraint-based leadership norms exhibit higher levels of political accountability, even after accounting for institutional, economic, and geographic factors.
           </div>
@@ -266,9 +244,7 @@
 
         <div class="item">
           <div class="item-title">Working Project</div>
-          <div>
-            <em>Performing Accountability: Electoral Systems and Emotional Display</em>
-          </div>
+          <div><em>Performing Accountability: Electoral Systems and Emotional Display</em></div>
           <div class="muted" style="margin-top:8px;">
             Examines how electoral institutions shape legislators' emotional expression as a visible form of political accountability. Using multimodal evidence from South Korea's mixed-member system, this project shows that stronger personal accountability induces more adversarial emotional performance in legislative debate.
           </div>
@@ -280,86 +256,67 @@
             Comparative political economy, institutions, elite politics, South Korea, and AI methods for social science.
           </div>
         </div>
-      </section>
-
-      <!-- Publications -->
-      <section class="section" id="publications">
-        <h2>Publications</h2>
-        <div class="item">
-          <div class="pub-entry">
-            Kang, H. and Rhee, D. (2024). "When does government debt make people happy? Evidence from 126 countries." <em>Economics of Governance</em>.
-          </div>
-          <div class="pub-entry">
-            Kang, H. and Rhee, D. (2021). "Does income (re)distribution matter for subjective well-being? Evidence from cross-country panel data." <em>Social Science Quarterly</em>.
-          </div>
-        </div>
-      </section>
-
-      <!-- Teaching -->
-      <section class="section" id="teaching">
-        <h2>Teaching</h2>
-        <div class="item">
-          <div class="item-title">Columbia University</div>
-
-          <div class="teaching-row">
-            <div>Comparative Ethnic Politics (Prof. Benjamin McClelland), TA</div>
-            <div class="teaching-year">2026</div>
-          </div>
-          <div class="teaching-row">
-            <div>Introduction to Comparative Politics (Prof. Benjamin McClelland), TA</div>
-            <div class="teaching-year">2025</div>
-          </div>
-          <div class="teaching-row">
-            <div>Game Theory II, Ph.D. level (Prof. Carlo Prato), TA</div>
-            <div class="teaching-year">2024</div>
-          </div>
-          <div class="teaching-row">
-            <div>Game Theory I, Ph.D. level (Prof. John Huber), TA</div>
-            <div class="teaching-year">2024</div>
-          </div>
-          <div class="teaching-row">
-            <div>Introduction to Comparative Politics (Prof. Benjamin McClelland), TA</div>
-            <div class="teaching-year">2023</div>
-          </div>
-          <div class="teaching-row">
-            <div>Quantitative Analysis II, SIPA (Prof. Alan Yang), TA</div>
-            <div class="teaching-year">2022</div>
-          </div>
-          <div class="teaching-row">
-            <div>Microeconomic Analysis, SIPA (Prof. Emanuele Gerrantana), TA</div>
-            <div class="teaching-year">2021</div>
-          </div>
-          <div class="teaching-row">
-            <div>Money and Banking, Dept. of Economics (Prof. Tri Vi Dang), TA</div>
-            <div class="teaching-year">2021</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CV -->
-      <section class="section" id="cv">
-        <h2>CV</h2>
-        <div class="item">
-          <div class="item-title">Curriculum Vitae</div>
-          <div class="muted">
-            <a href="Kang_CV.pdf" target="_blank">Download CV (PDF)</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Contact -->
-      <section class="section" id="contact">
-        <h2>Contact</h2>
-        <div class="item">
-          <div>Email: <a href="mailto:hk3125@columbia.edu">hk3125@columbia.edu</a></div>
-          <div class="muted" style="margin-top:6px;">Department of Political Science, Columbia University, New York, NY</div>
-        </div>
-      </section>
-
-      <div class="footer">
-        &copy; 2026 Haejo Kang
       </div>
+
+      <!-- Publications Panel -->
+      <div class="panel" id="publications">
+        <div class="pub-entry">
+          Kang, H. and Rhee, D. (2024). &ldquo;When does government debt make people happy? Evidence from 126 countries.&rdquo; <em>Economics of Governance</em>.
+        </div>
+        <div class="pub-entry">
+          Kang, H. and Rhee, D. (2021). &ldquo;Does income (re)distribution matter for subjective well-being? Evidence from cross-country panel data.&rdquo; <em>Social Science Quarterly</em>.
+        </div>
+      </div>
+
+      <!-- Teaching Panel -->
+      <div class="panel" id="teaching">
+        <div class="teaching-row">
+          <div>Comparative Ethnic Politics (Prof. Benjamin McClelland), TA</div>
+          <div class="teaching-year">2026</div>
+        </div>
+        <div class="teaching-row">
+          <div>Introduction to Comparative Politics (Prof. Benjamin McClelland), TA</div>
+          <div class="teaching-year">2025</div>
+        </div>
+        <div class="teaching-row">
+          <div>Game Theory II, Ph.D. level (Prof. Carlo Prato), TA</div>
+          <div class="teaching-year">2024</div>
+        </div>
+        <div class="teaching-row">
+          <div>Game Theory I, Ph.D. level (Prof. John Huber), TA</div>
+          <div class="teaching-year">2024</div>
+        </div>
+        <div class="teaching-row">
+          <div>Introduction to Comparative Politics (Prof. Benjamin McClelland), TA</div>
+          <div class="teaching-year">2023</div>
+        </div>
+        <div class="teaching-row">
+          <div>Quantitative Analysis II, SIPA (Prof. Alan Yang), TA</div>
+          <div class="teaching-year">2022</div>
+        </div>
+        <div class="teaching-row">
+          <div>Microeconomic Analysis, SIPA (Prof. Emanuele Gerrantana), TA</div>
+          <div class="teaching-year">2021</div>
+        </div>
+        <div class="teaching-row">
+          <div>Money and Banking, Dept. of Economics (Prof. Tri Vi Dang), TA</div>
+          <div class="teaching-year">2021</div>
+        </div>
+      </div>
+
+      <div class="footer">&copy; 2026 Haejo Kang</div>
     </main>
   </div>
+
+  <script>
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
