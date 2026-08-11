@@ -315,13 +315,13 @@
         <div class="chart-box">
           <h3>Country Positions in Normative Space</h3>
           <div style="position:relative;"><canvas id="scatterChart"></canvas></div>
-          <p class="chart-note">Each point shows one country&rsquo;s aggregate normative profile derived from pre-constitutional political texts. Higher = stronger emphasis. Values shown as (legal, virtue). The two ideals are near-orthogonal (|<em>r</em>| = .15). Source: Kang, <em>The Cultural Logic of Accountability</em>.</p>
+          <p class="chart-note">Each point shows one country&rsquo;s aggregate normative profile derived from pre-constitutional political texts. Selected countries shown; those with very sparse text coverage are omitted. Higher = stronger emphasis. Values shown as (legal, virtue). The two ideals are near-orthogonal (|<em>r</em>| = .15). Source: Kang, <em>The Cultural Logic of Accountability</em>.</p>
         </div>
 
         <div class="chart-box">
           <h3>Virtue Ideal Over Time by Country</h3>
           <div style="position:relative;"><canvas id="countryChart"></canvas></div>
-          <p class="chart-note">Rolling mean (&plusmn;300-year window, min. 2 thinkers) of thinker-level virtue ideal scores for selected countries. Gaps indicate insufficient data. Hover to highlight a country. Source: Kang, <em>The Cultural Logic of Accountability</em>.</p>
+          <p class="chart-note">Rolling mean (&plusmn;300-year window, min. 2 thinkers) of thinker-level virtue ideal scores for selected countries, 500 CE onward. Gaps indicate insufficient data. Hover to highlight a country. Source: Kang, <em>The Cultural Logic of Accountability</em>.</p>
         </div>
 
         <div class="item">
@@ -423,7 +423,7 @@
     /* ── Data ── */
     var V=[[-800,1.221,.491,1.951,13],[-700,1.842,.657,3.026,22],[-600,1.515,.623,2.408,31],[-500,1.406,.628,2.184,37],[-400,1.694,.905,2.484,41],[-300,1.634,.912,2.356,45],[-200,1.39,.634,2.146,43],[-100,1.141,.562,1.719,43],[0,1.303,.662,1.944,38],[100,1.212,.618,1.807,40],[200,.848,.378,1.317,37],[300,1.251,.281,2.221,39],[400,1.603,.486,2.72,35],[500,1.361,.144,2.578,31],[600,1.137,.124,2.15,38],[700,1.107,.143,2.071,40],[800,1.178,.437,1.92,56],[900,.847,.421,1.272,62],[1000,.756,.442,1.069,79],[1100,.82,.521,1.12,83],[1200,.744,.477,1.011,93],[1300,.696,.441,.951,112],[1400,.367,.179,.555,152],[1500,.016,-.125,.156,231],[1600,-.216,-.303,-.13,422],[1700,-.269,-.348,-.189,505],[1800,-.299,-.379,-.219,484],[1900,-.349,-.425,-.273,455]];
     var L=[[-800,.295,-.181,.771,13],[-700,-.016,-.676,.644,22],[-600,.193,-.307,.693,31],[-500,.114,-.34,.568,37],[-400,.032,-.397,.46,41],[-300,.062,-.331,.455,45],[-200,.014,-.381,.408,43],[-100,.23,-.049,.509,43],[0,.206,-.099,.511,38],[100,.352,.108,.596,40],[200,.492,.281,.703,37],[300,.486,.284,.687,39],[400,.439,.15,.728,35],[500,.384,.077,.692,31],[600,.312,.064,.561,38],[700,.249,0,.497,40],[800,.329,.132,.526,56],[900,.336,.156,.515,62],[1000,.273,.099,.446,79],[1100,.197,.007,.386,83],[1200,.013,-.219,.245,93],[1300,.016,-.194,.226,112],[1400,-.073,-.267,.12,152],[1500,-.273,-.448,-.098,231],[1600,-.056,-.166,.054,422],[1700,-.066,-.171,.04,505],[1800,-.046,-.152,.06,484],[1900,-.056,-.166,.054,455]];
-    var C=[['Algeria',.254,-.487],['Austria',-.148,-.587],['Canada',.112,-.583],['China',.198,1.550],['Czechia',-.596,-.570],['Egypt',.151,.254],['France',.038,-.167],['Germany',.004,-.379],['Greece',-.083,.434],['Hungary',-.394,-.401],['India',.522,-.088],['Iran',.052,.860],['Iraq',-.066,.651],['Ireland',-.229,-.229],['Israel',.188,-.107],['Italy',-.204,.219],['Japan',.382,.692],['Netherlands',.229,.109],['Nigeria',-1.240,.480],['Norway',.376,-.334],['Pakistan',-.828,-.020],['Poland',-.099,-.400],['Portugal',.419,-.151],['Russia',.171,-.089],['S. Africa',-.302,-1.008],['S. Korea',.292,.716],['Spain',.200,.364],['Switzerland',-1.221,-.342],['Syria',-.085,.829],['Tunisia',-.087,-.103],['Turkey',.410,.211],['Ukraine',.541,-.623],['UK',-.182,-.304],['United States',-.559,-.507],['Vietnam',.039,-.452]];
+    var C=[['Algeria',.254,-.487],['Austria',-.148,-.587],['Canada',.112,-.583],['China',.198,1.550],['Czechia',-.596,-.570],['Egypt',.151,.254],['France',.038,-.167],['Germany',.004,-.379],['Greece',-.083,.434],['Hungary',-.394,-.401],['India',.522,-.088],['Iran',.052,.860],['Iraq',-.066,.651],['Ireland',-.229,-.229],['Israel',.188,-.107],['Italy',-.204,.219],['Japan',.382,.692],['Netherlands',.229,.109],['Norway',.376,-.334],['Poland',-.099,-.400],['Portugal',.419,-.151],['Russia',.171,-.089],['S. Africa',-.302,-1.008],['S. Korea',.292,.716],['Spain',.200,.364],['Syria',-.085,.829],['Tunisia',-.087,-.103],['Turkey',.410,.211],['Ukraine',.541,-.623],['UK',-.182,-.304],['United States',-.559,-.507],['Vietnam',.039,-.452]];
 
     /* Per-country virtue ideal rolling data */
     var CTyears=[-800,-700,-600,-500,-400,-300,-200,-100,0,100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000];
@@ -433,7 +433,6 @@
       'S. Korea':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.65,0.875,1.421,1.062,0.634,0.634,0.489,0.513,-0.319,-0.637],
       'Japan':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,-0.299,-0.299,-0.299,-0.358,-0.184,-0.105,-0.08,-0.08,-0.08,-0.054,-0.046],
       'Iraq':[null,null,null,null,null,null,null,null,null,null,null,null,2.893,2.187,0.801,0.769,0.769,0.769,0.22,0.193,1.029,null,null,null,null,-0.561,-0.561,-0.561,-0.561],
-      'Greece':[0.747,0.618,0.497,0.566,0.704,0.835,0.363,0.237,0.474,0.474,0.118,0.118,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
       'Spain':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.25,0.25,-0.012,-0.026,0.018,0.248,0.035,0.389,0.605,0.723,0.566,0.467,0.732,0.373,-0.053],
       'Egypt':[1.021,null,null,null,null,1.372,null,null,null,null,null,null,null,null,-0.482,-0.482,-0.482,null,null,null,null,null,null,null,0.052,0.271,0.271,0.271,0.271],
       'France':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.844,1.844,1.844,0.923,0.838,0.448,0.397,0.045,-0.13,-0.249,-0.249,-0.268,-0.468],
@@ -441,7 +440,7 @@
       'Italy':[null,null,null,null,0.446,0.446,0.136,0.202,0.202,0.506,0.404,0.404,0.568,0.728,0.728,0.556,null,1.203,1.06,1.021,0.909,0.851,0.694,0.328,-0.071,-0.177,-0.29,-0.45,-0.454],
       'UK':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.76,0.55,0.44,0.387,0.286,0.044,-0.284,-0.394,-0.377,-0.383,-0.417,-0.51]
     };
-    var CTcolors={'China':'#C62828','Iran':'#2E7D32','S. Korea':'#1565C0','Japan':'#6A1B9A','Iraq':'#00838F','Greece':'#37474F','Spain':'#AD1457','Egypt':'#795548','France':'#1976D2','Germany':'#5D4037','Italy':'#00695C','UK':'#E65100'};
+    var CTcolors={'China':'#C62828','Iran':'#2E7D32','S. Korea':'#1565C0','Japan':'#6A1B9A','Iraq':'#00838F','Spain':'#AD1457','Egypt':'#795548','France':'#1976D2','Germany':'#5D4037','Italy':'#00695C','UK':'#E65100'};
 
     var tChart,sChart,cChart;
     function fmtYear(y){return y<0?Math.abs(y)+' BCE':y+' CE';}
@@ -525,13 +524,6 @@
             var ctx=chart.ctx,ys=chart.scales.y,xs=chart.scales.x,y0=ys.getPixelForValue(0);
             ctx.save();ctx.strokeStyle='rgba(0,0,0,.15)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
             ctx.beginPath();ctx.moveTo(xs.left,y0);ctx.lineTo(xs.right,y0);ctx.stroke();ctx.restore();
-          },
-          afterDraw:function(chart){
-            var ctx=chart.ctx,xs=chart.scales.x,ys=chart.scales.y;
-            ctx.save();ctx.font='italic 12px -apple-system,sans-serif';ctx.globalAlpha=.55;
-            ctx.fillStyle='#2C3E6E';ctx.fillText('the ancient concern',xs.getPixelForValue(-500),ys.getPixelForValue(1.05));
-            ctx.fillStyle='#4682C8';ctx.fillText('no trend',xs.getPixelForValue(1400),ys.getPixelForValue(.22));
-            ctx.restore();
           },
           afterEvent:function(chart,args){
             if(args.event.type==='mouseout'){
@@ -645,9 +637,9 @@
       var ctKeys=Object.keys(CT);
       var ctDS=ctKeys.map(function(c){
         var pts=[];
-        for(var i=0;i<CTyears.length;i++){if(CT[c][i]!==null)pts.push({x:CTyears[i],y:CT[c][i]});}
+        for(var i=0;i<CTyears.length;i++){if(CT[c][i]!==null&&CTyears[i]>=500)pts.push({x:CTyears[i],y:CT[c][i]});}
         return{label:c,data:pts,borderColor:CTcolors[c],backgroundColor:CTcolors[c],
-          pointRadius:3,pointHoverRadius:6,borderWidth:2,fill:false,tension:.3,spanGaps:false};
+          pointRadius:0,pointHoverRadius:5,borderWidth:3,fill:false,tension:.3,spanGaps:false};
       });
       cChart=new Chart(ctx3,{
         type:'line',data:{datasets:ctDS},
@@ -671,9 +663,9 @@
             chart._hiCountry=best;
             chart.data.datasets.forEach(function(ds,i){
               var col=CTcolors[ds.label];
-              if(best===-1){ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=2;ds.pointRadius=3;}
-              else if(i===best){ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=3.5;ds.pointRadius=5;}
-              else{ds.borderColor=hexRgba(col,.12);ds.backgroundColor=hexRgba(col,.12);ds.borderWidth=1;ds.pointRadius=0;}
+              if(best===-1){ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=3;}
+              else if(i===best){ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=4.5;}
+              else{ds.borderColor=hexRgba(col,.12);ds.backgroundColor=hexRgba(col,.12);ds.borderWidth=1.5;}
             });
             chart.update('none');
           },
@@ -685,11 +677,11 @@
             }}
           },
           scales:{
-            x:{type:'linear',min:-900,max:2100,
+            x:{type:'linear',min:500,max:2050,
               title:{display:true,text:'Year',font:{size:12}},
               ticks:{callback:function(v){return fmtYear(v)},maxTicksLimit:8},
               grid:{color:'rgba(0,0,0,.06)'}},
-            y:{min:-1.2,max:4,
+            y:{min:-1.2,max:2.5,
               title:{display:true,text:'Virtue ideal (z-score)',font:{size:12}},
               grid:{color:'rgba(0,0,0,.06)'}}
           }
@@ -706,7 +698,7 @@
               chart._hiCountry=-1;
               chart.data.datasets.forEach(function(ds){
                 var col=CTcolors[ds.label];
-                ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=2;ds.pointRadius=3;
+                ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=3;
               });
               chart.update('none');
             }
