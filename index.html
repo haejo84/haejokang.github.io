@@ -166,6 +166,27 @@
       border-top: 1px solid var(--line);
     }
 
+    /* Charts */
+    .chart-box {
+      margin: 20px 0;
+      padding: 22px 18px 16px;
+      background: #F0F4FA;
+      border-radius: 8px;
+    }
+    .chart-box h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2C3E6E;
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+    }
+    .chart-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 10px 0 0;
+      line-height: 1.5;
+    }
+
     @media (max-width: 800px) {
       .banner { height: 200px; }
       .wrap {
@@ -175,6 +196,7 @@
       }
       .tabs { overflow-x: auto; }
       .tab { padding: 8px 12px; font-size: 0.88rem; white-space: nowrap; }
+      .chart-box { padding: 14px 10px 12px; }
     }
   </style>
 </head>
@@ -238,7 +260,7 @@
           <div class="item-title">Dissertation Project</div>
           <div><em>The Cultural Logic of Accountability: How Leadership Ideals Shape Punishment and Responsiveness</em></div>
           <div class="muted" style="margin-top:8px;">
-            What explains cross-national variation in how citizens hold political elites accountable? This project argues that enduring differences in accountability are rooted in historically embedded leadership norms that shape expectations about how rulers should behave. To measure these norms, I construct a Leadership Norm Index (LNI) using a novel dataset of 1,542 texts spanning 59 countries and nearly five millennia. Using large language models, I code each text against 70 survey-style statements capturing normative expectations about rulers' personal conduct, responsiveness to subjects, adherence to law, deference to religion, and relationships with elites. To measure accountability, I assemble a new cross-national dataset of political leaders by systematically extracting biographical records of presidents and prime ministers over the past 50 years, tracking instances of misconduct and the consequences they face. Linking these data to the LNI, I show that societies whose intellectual traditions place greater emphasis on constraint-based leadership norms exhibit higher levels of political accountability, even after accounting for institutional, economic, and geographic factors.
+            What explains cross-national variation in how citizens hold political elites accountable? This project argues that enduring differences in accountability are rooted in historically embedded leadership norms that shape expectations about how rulers should behave. To measure these norms, I construct a Leadership Norm Index (LNI) using a novel dataset of 1,542 texts spanning 59 countries and nearly five millennia. Using large language models, I code each text against 70 survey-style statements capturing normative expectations about rulers' personal conduct, responsiveness to subjects, adherence to law, deference to religion, and relationships with elites. To measure accountability, I assemble a new cross-national dataset of political leaders by systematically extracting biographical records of presidents and prime ministers over the past 50 years, tracking instances of misconduct and the consequences they face. Linking these data to the LNI, I show that societies whose intellectual traditions place greater emphasis on constraint-based leadership norms exhibit higher levels of political accountability, even after accounting for institutional, economic, and geographic fctors.
           </div>
         </div>
 
@@ -281,6 +303,25 @@
             <li>76,207 text chunks classified against 72 normative statements on ruler conduct</li>
             <li>Country-level aggregation producing a 72-dimensional normative profile per country, spanning five domains: personal character, religious obligations, duties to subjects, elite relations, and rule adherence</li>
           </ul>
+        </div>
+
+        <!-- LNI Interactive Charts -->
+        <div class="chart-box">
+          <h3>Historical Trends in Leadership Ideals</h3>
+          <div style="position:relative;"><canvas id="timelineChart"></canvas></div>
+          <p class="chart-note">Rolling mean (&plusmn;300-year window) of thinker-level scores. Shaded bands show 95% confidence intervals. Hover to highlight. Source: Kang, <em>The Cultural Logic of Accountability</em>.</p>
+        </div>
+
+        <div class="chart-box">
+          <h3>Country Positions in Normative Space</h3>
+          <div style="position:relative;"><canvas id="scatterChart"></canvas></div>
+          <p class="chart-note">Each point shows one country&rsquo;s aggregate normative profile derived from pre-constitutional political texts. Higher = stronger emphasis. Values shown as (legal, virtue). The two ideals are near-orthogonal (|<em>r</em>| = .15). Source: Kang, <em>The Cultural Logic of Accountability</em>.</p>
+        </div>
+
+        <div class="chart-box">
+          <h3>Virtue Ideal Over Time: Top 10 Countries</h3>
+          <div style="position:relative;"><canvas id="countryChart"></canvas></div>
+          <p class="chart-note">Rolling mean (&plusmn;300-year window, min. 2 thinkers) of thinker-level virtue ideal scores for the top 10 countries by aggregate virtue ideal. Gaps indicate insufficient data. Hover to highlight a country. Source: Kang, <em>The Cultural Logic of Accountability</em>.</p>
         </div>
 
         <div class="item">
@@ -365,15 +406,245 @@
     </main>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script>
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    /* ââ Tab switching ââ */
+    var chartsReady=false;
+    document.querySelectorAll('.tab').forEach(function(tab){
+      tab.addEventListener('click',function(){
+        document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+        document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
         tab.classList.add('active');
         document.getElementById(tab.dataset.tab).classList.add('active');
+        if(tab.dataset.tab==='data'&&!chartsReady){chartsReady=true;setTimeout(buildCharts,60);}
       });
     });
+
+    /* ââ Data ââ */
+    var V=[[-800,1.221,.491,1.951,13],[-700,1.842,.657,3.026,22],[-600,1.515,.623,2.408,31],[-500,1.406,.628,2.184,37],[-400,1.694,.905,2.484,41],[-300,1.634,.912,2.356,45],[-200,1.39,.634,2.146,43],[-100,1.141,.562,1.719,43],[0,1.303,.662,1.944,38],[100,1.212,.618,1.807,40],[200,.848,.378,1.317,37],[300,1.251,.281,2.221,39],[400,1.603,.486,2.72,35],[500,1.361,.144,2.578,31],[600,1.137,.124,2.15,38],[700,1.107,.143,2.071,40],[800,1.178,.437,1.92,56],[900,.847,.421,1.272,62],[1000,.756,.442,1.069,79],[1100,.82,.521,1.12,83],[1200,.744,.477,1.011,93],[1300,.696,.441,.951,112],[1400,.367,.179,.555,152],[1500,.016,-.125,.156,231],[1600,-.216,-.303,-.13,422],[1700,-.269,-.348,-.189,505],[1800,-.299,-.379,-.219,484],[1900,-.349,-.425,-.273,455]];
+    var L=[[-800,.295,-.181,.771,13],[-700,-.016,-.676,.644,22],[-600,.193,-.307,.693,31],[-500,.114,-.34,.568,37],[-400,.032,-.397,.46,41],[-300,.062,-.331,.455,45],[-200,.014,-.381,.408,43],[-100,.23,-.049,.509,43],[0,.206,-.099,.511,38],[100,.352,.108,.596,40],[200,.492,.281,.703,37],[300,.486,.284,.687,39],[400,.439,.15,.728,35],[500,.384,.077,.692,31],[600,.312,.064,.561,38],[700,.249,0,.497,40],[800,.329,.132,.526,56],[900,.336,.156,.515,62],[1000,.273,.099,.446,79],[1100,.197,.007,.386,83],[1200,.013,-.219,.245,93],[1300,.016,-.194,.226,112],[1400,-.073,-.267,.12,152],[1500,-.273,-.448,-.098,231],[1600,-.056,-.166,.054,422],[1700,-.066,-.171,.04,505],[1800,-.046,-.152,.06,484],[1900,-.056,-.166,.054,455]];
+    var C=[['Algeria',.254,-.487],['Austria',-.148,-.587],['Canada',.112,-.583],['China',.198,1.550],['Czechia',-.596,-.570],['Egypt',.151,.254],['France',.038,-.167],['Germany',.004,-.379],['Greece',-.083,.434],['Hungary',-.394,-.401],['India',.522,-.088],['Iran',.052,.860],['Iraq',-.066,.651],['Ireland',-.229,-.229],['Israel',.188,-.107],['Italy',-.204,.219],['Japan',.382,.692],['Netherlands',.229,.109],['Nigeria',-1.240,.480],['Norway',.376,-.334],['Pakistan',-.828,-.020],['Poland',-.099,-.400],['Portugal',.419,-.151],['Russia',.171,-.089],['S. Africa',-.302,-1.008],['S. Korea',.292,.716],['Spain',.200,.364],['Switzerland',-1.221,-.342],['Syria',-.085,.829],['Tunisia',-.087,-.103],['Turkey',.410,.211],['Ukraine',.541,-.623],['UK',-.182,-.304],['United States',-.559,-.507],['Vietnam',.039,-.452]];
+
+    /* Per-country virtue ideal rolling data (top 10 by virtue ideal) */
+    var CTyears=[-800,-700,-600,-500,-400,-300,-200,-100,0,100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000];
+    var CT={
+      'China':[2.082,3.547,2.694,2.738,2.801,2.652,2.6,1.991,2.244,2.489,1.891,2.212,2.445,1.458,0.759,0.853,1.439,1.377,1.377,1.704,1.321,1.321,0.495,-0.617,-0.557,-0.498,-0.483,-0.483,-0.527],
+      'Iran':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.834,0.723,0.723,0.681,0.681,0.759,0.718,0.85,0.85,0.643,1.289,1.326,1.326,1.326],
+      'Syria':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.417,0.417,0.417,0.417],
+      'S. Korea':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.65,0.875,1.421,1.062,0.634,0.634,0.489,0.513,-0.319,-0.637],
+      'Japan':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,-0.299,-0.299,-0.299,-0.358,-0.184,-0.105,-0.08,-0.08,-0.08,-0.054,-0.046],
+      'Iraq':[null,null,null,null,null,null,null,null,null,null,null,null,2.893,2.187,0.801,0.769,0.769,0.769,0.22,0.193,1.029,null,null,null,null,-0.561,-0.561,-0.561,-0.561],
+      'Nigeria':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.436,1.436,0.48,0.48,0.48,0.48],
+      'Greece':[0.747,0.618,0.497,0.566,0.704,0.835,0.363,0.237,0.474,0.474,0.118,0.118,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+      'Spain':[null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.25,0.25,-0.012,-0.026,0.018,0.248,0.035,0.389,0.605,0.723,0.566,0.467,0.732,0.373,-0.053],
+      'Egypt':[1.021,null,null,null,null,1.372,null,null,null,null,null,null,null,null,-0.482,-0.482,-0.482,null,null,null,null,null,null,null,0.052,0.271,0.271,0.271,0.271]
+    };
+    var CTcolors={'China':'#C62828','Iran':'#2E7D32','Syria':'#F57F17','S. Korea':'#1565C0','Japan':'#6A1B9A','Iraq':'#00838F','Nigeria':'#EF6C00','Greece':'#37474F','Spain':'#AD1457','Egypt':'#795548'};
+
+    var tChart,sChart,cChart;
+    function fmtYear(y){return y<0?Math.abs(y)+' BCE':y+' CE';}
+    function hexRgba(h,a){var r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return'rgba('+r+','+g+','+b+','+a+')';}
+
+    /* ââ Build all charts ââ */
+    function buildCharts(){
+
+      /* ---------- TIMELINE ---------- */
+      var ctx1=document.getElementById('timelineChart').getContext('2d');
+      tChart=new Chart(ctx1,{
+        type:'line',
+        data:{datasets:[
+          {data:V.map(function(d){return{x:d[0],y:d[3]}}),borderColor:'transparent',pointRadius:0,borderWidth:0,fill:false},
+          {data:V.map(function(d){return{x:d[0],y:d[2]}}),borderColor:'transparent',pointRadius:0,borderWidth:0,
+           fill:{target:0,above:'rgba(44,62,110,.12)',below:'rgba(44,62,110,.12)'}},
+          {label:'Virtue ideal (character)',data:V.map(function(d){return{x:d[0],y:d[1]}}),
+           borderColor:'#2C3E6E',backgroundColor:'#2C3E6E',pointRadius:2.5,pointHoverRadius:5,
+           borderWidth:2.5,fill:false,tension:.3},
+          {data:L.map(function(d){return{x:d[0],y:d[3]}}),borderColor:'transparent',pointRadius:0,borderWidth:0,fill:false},
+          {data:L.map(function(d){return{x:d[0],y:d[2]}}),borderColor:'transparent',pointRadius:0,borderWidth:0,
+           fill:{target:3,above:'rgba(70,130,200,.12)',below:'rgba(70,130,200,.12)'}},
+          {label:'Legal ideal (rulers under law)',data:L.map(function(d){return{x:d[0],y:d[1]}}),
+           borderColor:'#4682C8',backgroundColor:'#4682C8',pointRadius:2.5,pointHoverRadius:5,
+           pointStyle:'rect',borderWidth:2.5,borderDash:[8,4],fill:false,tension:.3}
+        ]},
+        options:{
+          responsive:true,maintainAspectRatio:true,aspectRatio:2,
+          animation:{duration:1200,easing:'easeOutQuart'},
+          interaction:{mode:'nearest',intersect:false},
+          onHover:function(evt,els,chart){
+            var ds=chart.data.datasets;
+            if(els.length&&(els[0].datasetIndex===2||els[0].datasetIndex===5)){
+              var isV=els[0].datasetIndex===2;
+              ds[2].borderColor=isV?'#2C3E6E':'rgba(44,62,110,.1)';
+              ds[2].borderWidth=isV?3.5:1;ds[2].pointRadius=isV?4:0;
+              ds[1].fill={target:0,above:isV?'rgba(44,62,110,.18)':'rgba(44,62,110,.02)',below:isV?'rgba(44,62,110,.18)':'rgba(44,62,110,.02)'};
+              ds[5].borderColor=isV?'rgba(70,130,200,.1)':'#4682C8';
+              ds[5].borderWidth=isV?1:3.5;ds[5].pointRadius=isV?0:4;
+              ds[4].fill={target:3,above:isV?'rgba(70,130,200,.02)':'rgba(70,130,200,.18)',below:isV?'rgba(70,130,200,.02)':'rgba(70,130,200,.18)'};
+            }else{
+              ds[2].borderColor='#2C3E6E';ds[2].borderWidth=2.5;ds[2].pointRadius=2.5;
+              ds[5].borderColor='#4682C8';ds[5].borderWidth=2.5;ds[5].pointRadius=2.5;
+              ds[1].fill={target:0,above:'rgba(44,62,110,.12)',below:'rgba(44,62,110,.12)'};
+              ds[4].fill={target:3,above:'rgba(70,130,200,.12)',below:'rgba(70,130,200,.12)'};
+            }
+            chart.update('none');
+          },
+          plugins:{
+            legend:{position:'top',align:'end',labels:{
+              filter:function(i){return i.datasetIndex===2||i.datasetIndex===5},
+              usePointStyle:true,font:{size:12},padding:16}},
+            tooltip:{
+              filter:function(i){return i.datasetIndex===2||i.datasetIndex===5},
+              callbacks:{
+                title:function(items){return fmtYear(items[0].parsed.x)},
+                label:function(item){
+                  var src=item.datasetIndex===2?V:L,d=src[item.dataIndex];
+                  var dim=item.datasetIndex===2?'Virtue':'Legal';
+                  return[dim+': '+d[1].toFixed(2),'95% CI: ['+d[2].toFixed(2)+', '+d[3].toFixed(2)+']','n = '+d[4]+' thinkers'];
+                }
+              }
+            }
+          },
+          scales:{
+            x:{type:'linear',min:-900,max:2000,
+              title:{display:true,text:'Year',font:{size:12}},
+              ticks:{callback:function(v){return fmtYear(v)},maxTicksLimit:8},
+              grid:{color:'rgba(0,0,0,.06)'}},
+            y:{min:-0.8,max:3.2,
+              title:{display:true,text:'Canon emphasis (z-score, corpus-wide)',font:{size:12}},
+              grid:{color:'rgba(0,0,0,.06)'}}
+          }
+        },
+        plugins:[{
+          id:'tlAnnotations',
+          beforeDraw:function(chart){
+            var ctx=chart.ctx,ys=chart.scales.y,xs=chart.scales.x,y0=ys.getPixelForValue(0);
+            ctx.save();ctx.strokeStyle='rgba(0,0,0,.15)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(xs.left,y0);ctx.lineTo(xs.right,y0);ctx.stroke();ctx.restore();
+          },
+          afterDraw:function(chart){
+            var ctx=chart.ctx,xs=chart.scales.x,ys=chart.scales.y;
+            ctx.save();ctx.font='italic 12px -apple-system,sans-serif';ctx.globalAlpha=.55;
+            ctx.fillStyle='#2C3E6E';ctx.fillText('the ancient concern',xs.getPixelForValue(-500),ys.getPixelForValue(1.05));
+            ctx.fillStyle='#4682C8';ctx.fillText('no trend',xs.getPixelForValue(1400),ys.getPixelForValue(.22));
+            ctx.restore();
+          }
+        }]
+      });
+
+      /* ---------- SCATTER ---------- */
+      var ctx2=document.getElementById('scatterChart').getContext('2d');
+      sChart=new Chart(ctx2,{
+        type:'scatter',
+        data:{datasets:[{
+          data:C.map(function(d){return{x:d[1],y:d[2]}}),
+          backgroundColor:'#2C3E6E',pointRadius:5,pointHoverRadius:8,
+          pointHoverBackgroundColor:'#4682C8'
+        }]},
+        options:{
+          responsive:true,maintainAspectRatio:true,aspectRatio:1.3,
+          layout:{padding:{right:60,top:14,left:14,bottom:4}},
+          animation:{duration:2000,easing:'easeOutQuart',
+            delay:function(ctx){return ctx.type==='data'?ctx.dataIndex*50:0}},
+          plugins:{
+            legend:{display:false},
+            tooltip:{callbacks:{
+              title:function(items){return C[items[0].dataIndex][0]},
+              label:function(item){return['Legal ideal: '+item.parsed.x.toFixed(2),'Virtue ideal: '+item.parsed.y.toFixed(2)]}
+            }}
+          },
+          scales:{
+            x:{title:{display:true,text:'Legal ideal: rulers bound by law (std.)',font:{size:12}},grid:{color:'rgba(0,0,0,.06)'}},
+            y:{title:{display:true,text:'Virtue ideal: rulers formed by character (std.)',font:{size:12}},grid:{color:'rgba(0,0,0,.06)'}}
+          }
+        },
+        plugins:[{
+          id:'scAnnotations',
+          beforeDraw:function(chart){
+            var ctx=chart.ctx,xs=chart.scales.x,ys=chart.scales.y;
+            ctx.save();ctx.strokeStyle='rgba(0,0,0,.15)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
+            var x0=xs.getPixelForValue(0),y0=ys.getPixelForValue(0);
+            ctx.beginPath();ctx.moveTo(x0,ys.top);ctx.lineTo(x0,ys.bottom);ctx.stroke();
+            ctx.beginPath();ctx.moveTo(xs.left,y0);ctx.lineTo(xs.right,y0);ctx.stroke();
+            ctx.restore();
+            ctx.save();ctx.font='italic 13px -apple-system,sans-serif';ctx.globalAlpha=.45;ctx.fillStyle='#2C3E6E';
+            ctx.textAlign='left';ctx.fillText('virtue-led',xs.left+8,ys.top+18);
+            ctx.textAlign='right';ctx.fillText('both ideals strong',xs.right-8,ys.top+18);
+            ctx.fillStyle='#4682C8';ctx.fillText('law-led',xs.right-8,ys.bottom-8);
+            ctx.fillStyle='#787774';ctx.textAlign='left';ctx.font='11px -apple-system,sans-serif';
+            ctx.fillText('near-orthogonal (|r| = .15)',xs.left+8,ys.bottom-8);
+            ctx.restore();
+          },
+          afterDatasetsDraw:function(chart){
+            if(chart.width<300)return;
+            var ctx=chart.ctx,meta=chart.getDatasetMeta(0);
+            var fs=chart.width>550?10:8,vfs=chart.width>550?8:7;
+            ctx.save();
+            meta.data.forEach(function(pt,i){
+              var name=C[i][0],lx=C[i][1],vy=C[i][2];
+              var align=lx<-0.6?'right':'left',xoff=lx<-0.6?-7:7;
+              ctx.textAlign=align;
+              ctx.font='600 '+fs+'px -apple-system,sans-serif';ctx.fillStyle='#2C3E6E';
+              ctx.textBaseline='bottom';ctx.fillText(name,pt.x+xoff,pt.y-1);
+              ctx.font=vfs+'px -apple-system,sans-serif';ctx.fillStyle='#787774';
+              ctx.textBaseline='top';ctx.fillText('('+lx.toFixed(2)+', '+vy.toFixed(2)+')',pt.x+xoff,pt.y+2);
+            });
+            ctx.restore();
+          }
+        }]
+      });
+
+      /* ---------- COUNTRY TRENDS ---------- */
+      var ctx3=document.getElementById('countryChart').getContext('2d');
+      var ctKeys=Object.keys(CT);
+      var ctDS=ctKeys.map(function(c){
+        var pts=[];
+        for(var i=0;i<CTyears.length;i++){if(CT[c][i]!==null)pts.push({x:CTyears[i],y:CT[c][i]});}
+        return{label:c,data:pts,borderColor:CTcolors[c],backgroundColor:CTcolors[c],
+          pointRadius:3,pointHoverRadius:6,borderWidth:2,fill:false,tension:.3,spanGaps:false};
+      });
+      cChart=new Chart(ctx3,{
+        type:'line',data:{datasets:ctDS},
+        options:{
+          responsive:true,maintainAspectRatio:true,aspectRatio:2,
+          animation:{duration:1200,easing:'easeOutQuart'},
+          interaction:{mode:'nearest',intersect:false},
+          onHover:function(evt,els,chart){
+            var hovered=els.length?els[0].datasetIndex:-1;
+            chart.data.datasets.forEach(function(ds,i){
+              var col=CTcolors[ds.label];
+              if(hovered===-1){ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=2;ds.pointRadius=3;}
+              else if(i===hovered){ds.borderColor=col;ds.backgroundColor=col;ds.borderWidth=3.5;ds.pointRadius=5;}
+              else{ds.borderColor=hexRgba(col,.12);ds.backgroundColor=hexRgba(col,.12);ds.borderWidth=1;ds.pointRadius=0;}
+            });
+            chart.update('none');
+          },
+          plugins:{
+            legend:{position:'top',align:'start',labels:{usePointStyle:true,font:{size:11},padding:12,boxWidth:8}},
+            tooltip:{callbacks:{
+              title:function(items){return fmtYear(items[0].parsed.x)},
+              label:function(item){return item.dataset.label+': '+item.parsed.y.toFixed(2)}
+            }}
+          },
+          scales:{
+            x:{type:'linear',min:-900,max:2100,
+              title:{display:true,text:'Year',font:{size:12}},
+              ticks:{callback:function(v){return fmtYear(v)},maxTicksLimit:8},
+              grid:{color:'rgba(0,0,0,.06)'}},
+            y:{min:-1.2,max:4,
+              title:{display:true,text:'Virtue ideal (z-score)',font:{size:12}},
+              grid:{color:'rgba(0,0,0,.06)'}}
+          }
+        },
+        plugins:[{
+          id:'ctZero',
+          beforeDraw:function(chart){
+            var ctx=chart.ctx,ys=chart.scales.y,xs=chart.scales.x,y0=ys.getPixelForValue(0);
+            ctx.save();ctx.strokeStyle='rgba(0,0,0,.15)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(xs.left,y0);ctx.lineTo(xs.right,y0);ctx.stroke();ctx.restore();
+          }
+        }]
+      });
+    }
   </script>
 </body>
 </html>
