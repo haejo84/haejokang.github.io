@@ -566,14 +566,13 @@
             var hi=els.length?els[0].index:-1;
             if(chart._hiPoint===hi)return; /* no change: skip redraw */
             chart._hiPoint=hi;
-            var meta=chart.getDatasetMeta(0);
+            var ds=chart.data.datasets[0],n=ds.data.length;
             if(hi!==-1){
-              meta.data.forEach(function(pt,i){
-                pt.options.radius=i===hi?9:3;
-                pt.options.backgroundColor=i===hi?'#4682C8':'rgba(44,62,110,.15)';
-              });
+              var rads=[],cols=[];
+              for(var i=0;i<n;i++){rads.push(i===hi?9:3);cols.push(i===hi?'#4682C8':'rgba(44,62,110,.15)');}
+              ds.pointRadius=rads;ds.backgroundColor=cols;
             }else{
-              meta.data.forEach(function(pt){pt.options.radius=5;pt.options.backgroundColor='#2C3E6E';});
+              ds.pointRadius=5;ds.backgroundColor='#2C3E6E';
             }
             chart.update('none');
           },
@@ -625,8 +624,8 @@
           afterEvent:function(chart,args){
             if(args.event.type==='mouseout'){
               chart._hiPoint=-1;
-              var meta=chart.getDatasetMeta(0);
-              meta.data.forEach(function(pt){pt.options.radius=5;pt.options.backgroundColor='#2C3E6E';});
+              var ds=chart.data.datasets[0];
+              ds.pointRadius=5;ds.backgroundColor='#2C3E6E';
               chart.update('none');
             }
           }
